@@ -15,3 +15,40 @@ library(rvest)
 file_name = list.files(path = "./data", all.files = FALSE, full.names = FALSE)
 list(file_name)
 ```
+
+## Iterate over file names, read in data, and tidy the result
+```{r}
+select_name <- function(x) {
+  subject_ID_x = substr(x, 5,6)
+  arm_x = substr(x, 1, 3)
+  
+  tibble(
+    subject_ID = subject_ID_x, 
+    arm = arm_x
+  )
+}
+
+sep_name <- select_name(file_name)
+
+file_paths <- c("./data/con_01.csv", "./data/con_02.csv", "./data/con_03.csv", "./data/con_04.csv", "./data/con_05.csv", "./data/con_06.csv", "./data/con_07.csv", "./data/con_08.csv", "./data/con_09.csv", "./data/con_10.csv", "./data/exp_01.csv", "./data/exp_02.csv", "./data/exp_03.csv", "./data/exp_04.csv", "./data/exp_05.csv", "./data/exp_06.csv", "./data/exp_07.csv", "./data/exp_08.csv", "./data/exp_09.csv", "./data/exp_10.csv")
+
+read_data <- function(x) {
+  data <- read.csv(x)  
+  return(data)
+}
+
+hw5_data<- purrr::map(file_paths, read_data) |>
+  bind_rows() |>
+  bind_cols(x=_, y=sep_name) |>
+  janitor::clean_names() |>
+    pivot_longer(
+      week_1:week_8,
+      names_to = "week",
+      names_prefix = "week_",
+      values_to = "observation")
+  
+
+
+
+```
+
