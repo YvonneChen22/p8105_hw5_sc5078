@@ -59,4 +59,7 @@ hw5_data |>
   labs(title = "Spaghetti Plot for Control and Experiment Group", x = "Week", y = "Observation") +
   theme_minimal()
 ```
+According to the spaghetti plot of control group, there isn't a clear pattern of observation change over time. Specifically, the observation value in control group is relative stable among subjects over time. However, in the experiment group, subjects have a general increasing pattern of observation values over time.
+
+
 
