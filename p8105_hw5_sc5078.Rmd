@@ -5,6 +5,13 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
+library(tidyverse)
+library(rvest)
 ```
 
+# Problem 2
+## Start with a dataframe containing all file names
+```{r}
+file_name = list.files(path = "./data", all.files = FALSE, full.names = FALSE)
+list(file_name)
+```
