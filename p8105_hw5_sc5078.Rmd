@@ -93,6 +93,21 @@ for (mu in mu_values) {
 
   combined_results <- rbind(combined_results, current_results)
 }
+```
+
+## Make a plot showing the power of the test vs. the true value of μ
+```{r}
+combined_results |>
+  ggplot(aes(x = mu, y = power))+
+  geom_point() +
+  geom_line() +
+  labs(title = "Power of test vs. the true value of μ", x = "True value of μ", y = "Power of test") +
+  theme_minimal()
 
 ```
+
+The general relationship between the power of test and the true value of μ is that the larger the effect size, the larger the power. Specifically, power increase faster between the true mean 0 to 4, and slow down when the true mean increase from 4 to 6.
+
+
+
 
