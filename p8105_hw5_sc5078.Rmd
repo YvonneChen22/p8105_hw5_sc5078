@@ -1,5 +1,7 @@
 ---
 title: "p8105_hw5_sc5078"
+author: "Yvonne Chen"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: github_document
 ---
 
@@ -8,12 +10,55 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(rvest)
 library(ggplot2)
+library(p8105.datasets)
+library(viridis)
 ```
+
+# Problem 1
+## Load dataset, create 'city_state' variable, and clean the dataset
+The Washington Post has gathered data on homicides in 50 large U.S. cities:
+```{r}
+homicide = 
+  read.csv("./data/homicide-data.csv") |>
+  janitor::clean_names() |>
+  mutate(
+    city_state = str_c(city, state, sep = ", "),
+    resolution = ifelse(disposition == "Closed by arrest", "solved", "unsolved")
+    )
+```
+The dataset `homicide` has `r nrow(homicide)` cases, on variables that include the uid, reported date, victim name, race, age, and sex; the date the homicide was reported; the location of the homicide; and the status of the case. In order to clean the data, names of variables are uniform by perform `janitor::clean_names()`. `city_state` variable was created to show both city and state. `resolution` variable was created to indicate whether the case was solved.
+
+## Summarize within cities to obtain the total number of homicides and the number of unsolved homicides
+```{r}
+homicide_city = 
+homicide |>
+  group_by(city_state) |>
+  summarize(
+    hom_total = n(),
+    hom_unsolved = sum(resolution == "unsolved")
+    )
+```
+
+## Estimate the proportion of homicides that are unsolved for the city of Baltimore, MD
+```{r}
+prop.test(
+  x = filter(homicide_city, city_state %in% "Baltimore, MD") |> pull(hom_unsolved),
+  n = filter(homicide_city, city_state %in% "Baltimore, MD") |> pull(hom_total)
+ ) |>
+  broom::tidy() |>
+  janitor::clean_names() |>
+  select(estimate, conf_low, conf_high)
+```
+
+## Run prop.test for each of the cities
+
+
+
 
 # Problem 2
 ## Start with a dataframe containing all file names
 ```{r}
-file_name = list.files(path = "./data", all.files = FALSE, full.names = FALSE)
+file_name = list.files(path = "./data/problem2", all.files = FALSE, full.names = FALSE)
 list(file_name)
 ```
 
