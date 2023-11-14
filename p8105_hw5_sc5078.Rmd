@@ -62,4 +62,37 @@ hw5_data |>
 According to the spaghetti plot of control group, there isn't a clear pattern of observation change over time. Specifically, the observation value in control group is relative stable among subjects over time. However, in the experiment group, subjects have a general increasing pattern of observation values over time.
 
 
+# Problem 3
+## Construct dataset
+```{r}
+set.seed(6)
+
+sim_mean = function(mu, n = 30, sigma = 5, alpha = 0.05, sim = 5000) {
+  results <- data.frame(mu = rep(mu, sim),
+                        mu_hat = numeric(sim),
+                        p_value = numeric(sim))
+for (i in 1:sim) {
+  x <- rnorm(n, mean = mu, sd = sigma)
+  
+  t_result <- broom::tidy(t.test(x))
+  
+  results$mu_hat[i] <- mean(x)
+  results$p_value[i] <- t_result$p.value
+} 
+  results$power <- mean(results$p_value < alpha)
+  
+  return(results)
+}
+
+mu_values <- c(0,1,2,3,4,5,6)
+
+combined_results <- data.frame()
+
+for (mu in mu_values) {
+  current_results <- sim_mean(mu)
+
+  combined_results <- rbind(combined_results, current_results)
+}
+
+```
 
