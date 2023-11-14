@@ -118,8 +118,25 @@ combined_results |>
   ggplot(aes(x = mu, y = mu_hat_avg))+
   geom_point() +
   geom_line() +
-  labs(title = "Power of test vs. the true value of μ", x = "True value of μ", y = "Power of test") +
+  labs(title = "average estimate of μ_hat vs. the true value of μ", x = "True value of μ", y= "average estimate of μ_hat ") +
   theme_minimal()
 ```
 
+## Make a plot of the average estimate of μ̂ only in samples for which the null was rejecte vs. the true value of μ
+```{r}
+combined_results |>
+  group_by(mu) |>
+  filter(p_value < 0.05) |>
+  mutate(
+    mu_hat_avg = mean(mu_hat)
+  ) |>
+  ggplot(aes(x = mu, y = mu_hat_avg))+
+  geom_point() +
+  geom_line() +
+  labs(title = "average estimate of μ_hat vs. the true value of mu when the null was rejected", x = "True value of μ", y= "average estimate of μ_hat ") +
+  theme_minimal()
 
+
+```
+
+According to two plots above, the sample average of μ̂  across tests for which the null is rejected is not equal to the true value of μ when μ is 1, 2, and 3 and they are approximately the same when μ is 0, 4, 5, and 6. The reason may be that when the true value of μ is small, the power of the test is weak and further influence the accuracy of estimation. 
