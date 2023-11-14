@@ -51,7 +51,7 @@ prop.test(
 ```
 
 ## Run prop.test for each of the cities
-```{r}
+```{r warning=FALSE}
 test_results = 
   homicide_city |> 
   mutate(
@@ -62,6 +62,16 @@ test_results =
   janitor::clean_names() |>
   select(city_state, estimate, conf_low, conf_high) |>
   mutate(city_state = fct_reorder(city_state, estimate))
+```
+
+## Create a plot that shows the estimates and CIs for each city
+```{r}
+test_results |>
+  ggplot(aes(x = city_state, y = estimate)) + 
+  geom_point() + 
+  geom_errorbar(aes(ymin = conf_low, ymax = conf_high)) +
+  theme(axis.text.x = element_text(angle = 90))
+
 ```
 
 
