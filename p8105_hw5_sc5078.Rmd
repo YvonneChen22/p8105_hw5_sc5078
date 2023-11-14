@@ -51,7 +51,18 @@ prop.test(
 ```
 
 ## Run prop.test for each of the cities
-
+```{r}
+test_results = 
+  homicide_city |> 
+  mutate(
+    prop_tests = purrr::map2(hom_unsolved, hom_total, \(x, y) prop.test(x = x, n = y)),
+    tidy_tests = purrr::map(prop_tests, broom::tidy)) |>
+  select(-prop_tests) |>
+  unnest(tidy_tests) |>
+  janitor::clean_names() |>
+  select(city_state, estimate, conf_low, conf_high) |>
+  mutate(city_state = fct_reorder(city_state, estimate))
+```
 
 
 
